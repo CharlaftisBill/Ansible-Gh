@@ -29,4 +29,11 @@ gh auth login
 
 6. Copy-paste the token (gh...) from  browser to terminal and press enter.
 
-7. Enjoy!
+7. Set your mai,username:
+
+```bash
+git config --global user.email "your@email.com"
+git config --global user.name "username"
+```
+
+8. Enjoy!
