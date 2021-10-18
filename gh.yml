@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  become: true
+  tasks:
+
+  - name: Downloading githubcli-archive-keyring.gpg.
+    get_url:
+      url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+      dest: /usr/share/keyrings/githubcli-archive-keyring.original.gpg
+
+  - name: Running gpg on githubcli-archive-keyring.gpg.
+    shell: cat /usr/share/keyrings/githubcli-archive-keyring.original.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+    become: true
+
+  - name: Add gh package repository source.
+    ansible.builtin.apt_repository:
+      filename: /etc/apt/sources.list.d/github-cli.list
+      repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
+      update_cache: yes
+
+  - name: Install gh.
+    apt:
+      name: gh
+      state: present
